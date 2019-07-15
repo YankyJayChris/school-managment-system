@@ -3,17 +3,14 @@
     if(isset($_POST['submit'])){
         $user = $_POST['user'];
         $pass = $_POST['pass'];
-        $query = "select * from userdata where username= :user and password= :pass";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([':user' =>$user, ':pass' => $pass]);
-        $count= $stmt->rowCount();
-
-        if($count > 0){
-            $row = $stmt->fetch(PDO::FETCH_OBJ);
-            $_SESSION['level'] = $row->level;
-            $_SESSION['id'] = $row->username;
-            $_SESSION['name'] = $row->fname.' '.$row->lname;
-            header('location:'.$row->level.'');
+        $query = "select * from userdata where username='$user' and password='$pass'";
+        $r = mysql_query($query);
+        if(mysql_num_rows($r) == 1){
+            $row = mysql_fetch_assoc($r);
+            $_SESSION['level'] = $row['level'];
+            $_SESSION['id'] = $row['username'];
+            $_SESSION['name'] = $row['fname'].' '.$row['lname'];
+            header('location:'.$row['level'].'');
         }else{
             header('location:index.php?login=0');
         }
@@ -36,7 +33,7 @@
     <title>marks recording System</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/font-awesome.min.css" />
     <link rel="stylesheet" href="css/style.css" />
     <!-- Custom styles for this template -->
@@ -46,7 +43,7 @@
 
   <body>
 
-    <nav class="navbar navbar-inverse  navbar-fixed-top" role="navigation" data-color ="blue">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">

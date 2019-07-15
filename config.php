@@ -1,14 +1,11 @@
 <?php
     session_start();
-    $dsn = 'mysql:host=localhost; dbname=school';
+    $host = 'localhost';
     $user = 'root';
     $pass = '';
-    
-    try{
-        $pdo = new PDO($dsn, $user, $pass);
-    }catch(PDOException $e){
-        echo 'connection error! ' .$e->getMessage();
-    }
+    $db = 'grading';
 
+    mysql_connect($host,$user,$pass) or die(mysql_error());
+    mysql_select_db($db);
 
 ?>

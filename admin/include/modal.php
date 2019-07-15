@@ -34,93 +34,57 @@
             <h3>Add Class Info</h3>
         </div>
         <div class="modal-body">
-            <form id= "addclassmodal" action="data/class_model.php" method="POST">
-            <div class="form-group">  
-                    <select id="subject_c" name="subject" class="form-control" required>
-                        <option value="">Select Subject...</option>
-                        <?php 
-                        $r = "select * from subject";
-                        $stmt = $pdo->prepare($r);
-                        $stmt->execute();
-                        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                                extract($row);
-                   
-                        echo "<option value='$code'>$code- ($title)</option>";}
-                    ?>
-                    </select>
-                    
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="course_c" name="course" class="form-control" required>
-                        <option value="">Select Course...</option>
-                        <?php 
-                            include('../../config.php');
-                            $r = "select * from courses";
-                            $stmt = $pdo->prepare($r);
-                            $stmt->execute();
-                            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                                extract($row);
-                                echo $course;
-                                echo $title;
-                            echo "<option value='$course'>$course - ($title)</option>";
-                        }
-                        ?>
-
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="year_c" name="year" class="form-control" required>
-                        <option value="">Select Year...</option>
-                        <option value="I">I</option>
-                        <option value="II">II</option>
-                        <option value="III">III</option>
-                        <option value="IV">IV</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="section_c" name="section" class="form-control" required>
-                        <option value="">Select Section...</option>
-                        <?php 
-                            $r = "select * from section";
-                            $stmt = $pdo->prepare($r);
-                            $stmt->execute();
-                            
-                            while($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                        ?>
-                            <option value="<?php echo $row['shortname']; ?>"><?php echo $row['sectionname']; ?> - (<?php echo $row['shortname']; ?>)</option>
-                        <?php endwhile; ?>
-                    </select>
-                </div>
+            <form action="data/class_model.php?q=addclass" method="post">
                 <div class="form-group">  
-                    <select id="Teacher_c" name="teacherid" class="form-control" required>
-                        <option value="">Select Teacher...</option>
-                        <?php 
-                        $r = "select * from teachers";
-                        $stmt = $pdo->prepare($r);
-                        $stmt->execute();
-                        while($row = $stmt->fetch(PDO::FETCH_ASSOC)):
+                    <select name="subject" class="form-control" required>
+                        <option value="">Select Subject...</option>
+                    <?php 
+                        $r = mysql_query("select * from subject");
+                        while($row = mysql_fetch_array($r)):
                     ?>
-                        <option value="<?php echo $row['teacherid']; ?>"><?php echo $row['teacherid']; ?> - (<?php echo $row['fname'].''.$row['lname']; ?>)</option>
+                        <option value="<?php echo $row['code']; ?>"><?php echo $row['code']; ?> - (<?php echo $row['title']; ?>)</option>
                     <?php endwhile; ?>
                     </select>
-                    
+                </div>
+                <div class="form-group">
+                    <select name="course" class="form-control" required>
+                        <option value="">Select Course...</option>
+                        <option>BSIT</option>
+                        <option>BSCRIM</option>
+                        <option>BSAT</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <select id="term_c" name="term" class="form-control" required>
-                        <option value="">Select Term...</option>
-                        <option value="1">1st</option>
-                        <option value="2">2nd</option>
-                        <option value="3">3nd</option>
+                    <select name="year" class="form-control" required>
+                        <option value="">Select Year...</option>
+                        <option>I</option>
+                        <option>II</option>
+                        <option>III</option>
+                        <option>IV</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="section" class="form-control" required>
+                        <option value="">Select Section...</option>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                        <option>D</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="sem" class="form-control" required>
+                        <option value="">Select Semester...</option>
+                        <option>1st</option>
+                        <option>2nd</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <select id="sy_c" name="sy" class="form-control" required>
+                    <select name="sy" class="form-control" required>
                         <option value="">Select S.Y.</option>
                         <?php $year = date('Y'); ?>
-                        <?php for($c=5; $c > 0; $c--): ?>
+                        <?php for($c=10; $c > 0; $c--): ?>
                         <option><?php echo $year; ?>-<?php echo $year+1?></option>
                         <?php $year--; ?>
                         <?php endfor; ?>
@@ -129,8 +93,8 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button id="submit_c" type="submit" name="addclass" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
-        </form>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+            </form>
         </div>
     </div>
   </div>
@@ -144,7 +108,7 @@
             <h3><i class="fa fa-user"></i> Add Student</h3>
         </div>
         <div class="modal-body">
-            <form action="data/student_model.php" method="post">
+            <form action="data/student_model.php?q=addstudent" method="post">
                 <div class="form-group">
                     <input type="text" class="form-control" name="studid" placeholder="student ID" />
                 </div>
@@ -153,55 +117,6 @@
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" name="lname" placeholder="lastname" />
-                </div>
-                <div class="form-group">
-                <div class="form-group">
-                    <select id="sy_s" name="sy_s" class="form-control" required>
-                        <option value="">Select School Year</option>
-                        <?php $year = date('Y'); ?>
-                        <?php for($c=10; $c > 0; $c--): ?>
-                        <option><?php echo $year; ?>-<?php echo $year+1?></option>
-                        <?php $year--; ?>
-                        <?php endfor; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="year_s" name="year_s" class="form-control" required>
-                        <option value="">Select Year...</option>
-                        <option value="I">I</option>
-                        <option value="II">II</option>
-                        <option value="III">III</option>
-                        <option value="IV">IV</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="section_s" name="section_s" class="form-control" required>
-                        <option value="">Select Section...</option>
-                        <?php 
-                            $r2 = "select * from section";
-                            $stmt2 = $pdo->prepare($r2);
-                            $stmt2->execute();
-                            
-                            while($row = $stmt2->fetch(PDO::FETCH_ASSOC)):
-                        ?>
-                            <option value="<?php echo $row['shortname']; ?>"><?php echo $row['sectionname']; ?> - (<?php echo $row['shortname']; ?>)</option>
-                        <?php endwhile; ?>
-                    </select>
-                </div>
-                <select id="course_c" name="course" class="form-control" required>
-                        <option value="">Select Course...</option>
-                        <?php 
-                            include('../../config.php');
-                            $r = "select * from courses";
-                            $stmt = $pdo->prepare($r);
-                            $stmt->execute();
-                            
-                         while($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                    ?>
-                        <option value="<?php echo $row['course']; ?>"><?php echo $row['course']; ?> - (<?php echo $row['title']; ?>)</option>
-                    <?php endwhile; ?>
-
-                    </select>
                 </div>
         </div>
         <div class="modal-footer">
@@ -218,10 +133,10 @@
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
         <div class="modal-header">
-            <h3><i class="fa fa-user"></i> Add Teacher</h3>
+            <h3><i class="fa fa-user"></i> Add Student</h3>
         </div>
         <div class="modal-body">
-            <form action="data/teacher_model.php" method="post">
+            <form action="data/teacher_model.php?q=addteacher" method="post">
                 <div class="form-group">
                     <input type="text" class="form-control" name="teachid" placeholder="teacher ID" />
                 </div>
